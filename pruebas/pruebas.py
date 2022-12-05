@@ -44,7 +44,7 @@ class cajero():
 
          
         import json
-        ruta = "cajero/dataUsuarios.json"
+        ruta = "pruebas/datosUsuarios.json"
         with open(ruta, "r") as file:
             data = json.load(file)
         print("lectura de datos=>", data)
@@ -62,15 +62,28 @@ class cajero():
         self.usuarios = listaUsuarios
 
     def ingresar(self):
-        for usuario in self.data:
-            if usuario["documento"]== self.documento:
-                print("vengaaaaa")
-                if usuario["clave"]==self.clave:
-                    print("bienvenido")
-                    ingreso=True
-                else: print("contraseña incorrecta")
 
-            else: print("usuario incorrecto")
+        import json
+        ruta = "pruebas/datosUsuarios.json"
+        with open(ruta, "r") as file:
+            data = json.load(file)
+        self.data=data
+
+        ingreso=False
+        while ingreso==False:
+            for usuario in self.data:
+                if usuario["documento"]== self.documento:
+                    print("vengaaaaa")
+                    if usuario["clave"]==self.clave:
+                        print("bienvenido")
+                        ingreso=True
+                        break
+                    else: print("contraseña incorrecta")
+                    break
+                else:ingreso=False
+            if ingreso==False:
+                print("usuario invalido")
+            break
         return ingreso
 
     def borrarUsuario(self):
@@ -122,21 +135,28 @@ class cajero():
                 if usuario["clave"]==self.clave:
                     datoActualizar=input("ingrese el dato que quiere actualizar: ")
                     del usuario[datoActualizar]
-                    if datoActualizar=="nombre":
+                    if datoActualizar == "nombre":
                         datoActualizado=input("ingrese el dato actualizado: ")
                         usuario[datoActualizar]=datoActualizado
-                    else: datoActualizado=input("ingrese el dato actualizado: ")
-                    usuario[datoActualizar]=int(datoActualizado)
+                    elif datoActualizar !="nombre":
+                        datoActualizado=input("ingrese el dato actualizado: ")
+                        usuario[datoActualizar]=int(datoActualizado)
 
                     import json
                     ruta="pruebas/datosUsuarios.json"
                     with open(ruta,"w") as file:
                         json.dump(self.data,file)
 
+                    actualizacion="actualizacion exitosa"
+
+                    break
+
                 else: print("contraseña incorrecta")
                 actualizacion=False
+                break
             else: print("usuario incorrecto")
-            actualizacion="actualizacion exitosa"
+            actualizacion=False
+            break
         return actualizacion
 
     def consignacion(self):
@@ -204,7 +224,7 @@ class cajero():
 def crearUsuario():
 
     import json
-    ruta = "cajero/dataUsuarios.json"
+    ruta = "pruebas/datosUsuarios.json"
     with open(ruta, "r") as file:
         data = json.load(file)
 
@@ -244,5 +264,5 @@ def crearUsuario():
 
 
 if __name__ == "__main__":
-    curso1 = cajero(142,123)
-    print("ingreso=>", curso1.retiro())
+    curso1 = cajero(10026,114)
+    print("ingreso=>", curso1.ingresar())
